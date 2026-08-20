@@ -93,37 +93,73 @@ I can see 28,145 events. For the first step, I will check the sourcetypes to see
 - To find the location of the ransomware, I have to find for the event(ransomare executed) in the logs. By searching SourceType Sysmon I identified what event codes were available under the field “EventCode”:
 ```index=main sourcetype="WinEventLog:Microsoft-Windows-Sysmon/Operational"
 ```
-The directory could be normal as the hint says it.
+I can see Event ID 11 FileCreate, which is logged when a file is created or overwritten and can be useful to identify if any suspicious files were created. 
+```index=main sourcetype="WinEventLog:Microsoft-Windows-Sysmon/Operational" EventCode=11
+```
+![alt text](../assets/8.png)
 
 2. What is the Sysmon event ID for the related file creation event?
-
+- We can refer this from the above question: 11
 
 3. Can you find the MD5 hash of the ransomware?
 
+![alt text](../assets/9.png)
 
 4. What file was saved to multiple folder locations?
 
+```
+index=main sourcetype="WinEventLog:Microsoft-Windows-Sysmon/Operational" EventCode=11 | stats count by TargetFilename
+```
+Using this command get the file that is saved in multiple location.
 
+![alt text](../assets/10.png)
 
 5. What was the command the attacker used to add a new user to the compromised system?
 
+I used the Sysmon CommandLine field to search for specific commands. By adding a wildcard, I found any command that included text with /add
+
+```
+index=main sourcetype="WinEventLog:Microsoft-Windows-Sysmon/Operational" CommandLine="*/add*"
+```
+Searching throught the commandline field gave the command that attacker used.
+![alt text](../assets/11.png)
+
 6. The attacker migrated the process for better persistence. What is the migrated process image (executable), and what is the original process image (executable) when the attacker got on the system?
 
-7. The attacker also retrieved the system hashes. What is the process image used for getting the system hashes?
+Used Sysmon Event ID 8 (CreateRemoteThread) to find when one process creates a thread inside another process. Malware uses this trick to inject dangerous code and hide. (Hint: Try Sysmon event code 8)
 
 
-8. What is the web shell the exploit deployed to the system?
+```
+index=main sourcetype="WinEventLog:Microsoft-Windows-Sysmon/Operational" EventCode=8
+```
+This returned 2 events
+```
+index=main sourcetype="WinEventLog:Microsoft-Windows-Sysmon/Operational" EventCode=8 | table SourceImage, TargetImage
+```
 
+![alt text](../assets/12.png)
+
+Thsi image shows that powershell.exe started up first, and then it moved its code into unsecapp.exe.
+
+
+
+7. The attacker also retrieved the system hashes. What is the process image used for getting the system hashes? (hint: Try Sysmon event code 8 & check Target Image.)
+
+![alt text](../assets/12.png)
+
+8. What is the web shell the exploit deployed to the system? (Hint: Try looking in the IIS logs for POST requests.)
+```
+index=main sourcetype=iis cs_method=POST 
+| search *.php* OR *.asp* OR *.aspx* OR *.jsp*
+```
+![alt text](../assets/13.png)
 
 9. What is the command line that executed this web shell?
 
-
-
-10. What three CVEs did this exploit leverage? Provide the answer in ascending order.
-
-
-
-
+```
+index=main i3gfPctK1c2x.aspx sourcetype="WinEventLog:Microsoft-Windows-Sysmon/Operational"
+```
+![alt text](../assets/14.png)
 
 
 7. **Questions**
