@@ -85,12 +85,41 @@ I can see 28,145 events. For the first step, I will check the sourcetypes to see
 
 ![alt text](../assets/7.png)
 
+
+
 **Questions and Answers**
 
 1. Can you identify the location of the ransomware? (Hint: Look for a common Windows binary located in an unusual location.)
 - To find the location of the ransomware, I have to find for the event(ransomare executed) in the logs. By searching SourceType Sysmon I identified what event codes were available under the field “EventCode”:
 ```index=main sourcetype="WinEventLog:Microsoft-Windows-Sysmon/Operational"
 ```
+The directory could be normal as the hint says it.
+
+2. What is the Sysmon event ID for the related file creation event?
+
+
+3. Can you find the MD5 hash of the ransomware?
+
+
+4. What file was saved to multiple folder locations?
+
+
+
+5. What was the command the attacker used to add a new user to the compromised system?
+
+6. The attacker migrated the process for better persistence. What is the migrated process image (executable), and what is the original process image (executable) when the attacker got on the system?
+
+7. The attacker also retrieved the system hashes. What is the process image used for getting the system hashes?
+
+
+8. What is the web shell the exploit deployed to the system?
+
+
+9. What is the command line that executed this web shell?
+
+
+
+10. What three CVEs did this exploit leverage? Provide the answer in ascending order.
 
 
 
@@ -100,23 +129,23 @@ I can see 28,145 events. For the first step, I will check the sourcetypes to see
 7. **Questions**
 
 1. What is the difference between an index, a sourcetype, and a field in Splunk?
+- An index is like a database where splunk srotes data, a sourcetype is a classification of the data that describes the source of the data, and a field is a piece of information extracted from the data.
 
 2. What does the pipe ( | ) operator do in SPL, and why is it central to how Splunk searches work?
+- The pipe operator ( | ) is used to add the next command to the search, allowing us to filter and analyze the data. It is central to how splunk searches work because it allows us to combine multiple commands to create refined/filtered searches.
 
-3. What is the purpose of the “Interesting Fields” panel, and how did it help you during this
-investigation?
+3. What is the purpose of the “Interesting Fields” panel, and how did it help you during this investigation?
+- The "Interesting Fields" panel in splunk displays the fields that are most used in the current search results. It helps during the investigation by allowing us to quickly refer to the fields.
 
-
-4. Why is choosing the correct time range important in Splunk, and what could go wrong if it's set
-incorrectly?
-
-
-5. How would you make a search you wrote today reusable as an alert that fires automatically in the
-future?
+4. Why is choosing the correct time range important in Splunk, and what could go wrong if it's set incorrectly?
+- Choosing the correct time range is important in splunk because it allows us to focus on the common time frame of the events we are investigating. If it is set incorrectly, there is high possibility of missing important events, which could lead to incomplete or incorrect analysis.
 
 
-6. Why did the analyst pivot from Sysmon logs to IIS logs (and back) during the investigation? What does
-each log source tell you that the other doesn't?
+5. How would you make a search you wrote today reusable as an alert that fires automatically in the future?
+- I would save the search as a report and then create an alert based on that report. This way, the alert can be configured to trigger automatically based on specific conditions.
+
+6. Why did the analyst pivot from Sysmon logs to IIS logs (and back) during the investigation? What does each log source tell you that the other doesn't?
+- 
 
 
 7. Why do attackers use process migration/injection (e.g. into a legitimate process) instead of just
