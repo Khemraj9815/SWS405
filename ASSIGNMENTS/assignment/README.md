@@ -175,5 +175,97 @@ finally after trying multiple tools because i missed the hint given in the chall
 
 flag: "inctf{0n3_h4lf_1s_n0t_3n0ugh}
 
-**Lab 4: The Final Stage: The Evil's Den**
+**Lab 4: Obsession**
 
+Challenge Description:
+
+My system was recently compromised. The Hacker stole a lot of information but he also deleted a very important file of mine. I have no idea on how to recover it. The only evidence we have, at this point of time is this memory dump. Please help me.
+
+Note: This challenge is composed of only 1 flag.
+
+The flag format for this lab is: inctf{s0me_l33t_Str1ng}
+
+basic info about the .raw file 
+![alt text](assets/39.png)
+
+
+![alt text](assets/40.png)
+Here i used hashdump to know the users on the system and the filescan to know the files addresses with all the files from this memory dump
+
+![alt text](assets/41.png)
+after scaning the files I found the file named "Important.txt" and the offset of the file is 0x000000003fc398d0. lets dump the file and see what is inside it.
+
+no file is getting dumped from the memory dump, means that the file is been deleted for real 
+
+![alt text](assets/42.png)
+using mftparser plugin, we can extract the Master File Table (MFT) from the memory dump and save it to a text file called mem4_mft.txt. This is done to avoid overwhelming our terminal with a large amount of text. After the extraction is complete, we can use the grep command to search for "important.txt" in the mem4.txt file and display 20 lines following the matching line. This will allow us to locate the flag, which is embedded in the hex data, and we can then remove any white spaces to retrieve the flag.
+
+![alt text](assets/43.png)
+inctf{1_is_n0t_EQu4l_7o_2_bUt_th1s_d0s3nt_m4ke_s3ns3} Good work :P
+
+got the flag for this lab.
+
+**Lab 5: Black Tuesday**
+
+We received this memory dump from our client recently. Someone accessed his system when he was not there and he found some rather strange files being accessed. Find those files and they might be useful. I quote his exact statement,
+
+    The names were not readable. They were composed of alphabets and numbers but I wasn't able to make out what exactly it was.
+
+Also, he noticed his most loved application that he always used crashed every time he ran it. Was it a virus?
+
+Note-1: This challenge is composed of 3 flags. If you think 2nd flag is the end, it isn't!! :P
+
+Note-2: There was a small mistake when making this challenge. If you find any string which has the string "L4B_3_D0n3!!" in it, please change it to "L4B_5_D0n3!!" and then proceed.
+
+Note-3: You'll get the stage 2 flag only when you have the stage 1 flag.
+
+![alt text](assets/44.png)
+information on the memory dump file
+
+![alt text](image.png)
+
+firstly, I checked the command line to locate the files since the NOTEPAD process was running. However, instead of a file name, we found the name of a RAR file. Additionally, it was interesting to note that NOTEPAD was running from the Videos folder.
+![alt text](assets/46.png)
+
+I dumped the rar file, but as we know, it is password protected. Additionally, the challenge description indicates that we cannot obtain the stage 2 flag before acquiring the stage 1 flag. Therefore, our first task is to locate the stage 1 flag.
+![alt text](assets/47.png)
+
+![alt text](assets/48.png)
+when I tried to open the file, it was for stage 2, so we need to find the stage 1 flag to find the stage 2 flag.
+
+I dumped the NOTEPAD process that was running from the Videos folder, which resulted in three files being dumped. I examined all three files, but unfortunately, I couldn't find any useful information regarding the password for the RAR file or the first flag. 
+
+![alt text](assets/49.png)
+
+I started checking other plugins like cmdscan and clipboard, and during the netscan, I found a different executable that I have only seen in this challenge, namely wininit.exe.
+
+![alt text](assets/50.png)
+
+**iehistory**: This plugin is designed to recover fragments of Internet Explorer history index.dat cache files. It can identify basic accessed links (via FTP or HTTP), redirected links (— REDR), and deleted entries (— LEAK). The plugin applies to any process that loads and utilizes the wininet.dll library, not just Internet Explorer. This typically includes Windows Explorer and even malware samples. By using the iehistory plugin, we can find a list of files accessed by the browser, which may include numerous files to confuse us, as well as many old challenge files.
+![alt text](assets/51.png)
+after searching for few minutes, this text seems to be useful.
+![alt text](assets/52.png)
+when I decoded the base64 string, I got the first flag for this lab.
+
+flag: flag{!!_w3LL_d0n3_St4g3-1_0f_L4B_5_D0n3_!!}
+
+now lets move to the next stage. I am stuck because i don't have passphrase for the second flag maybe i can use first flag as passphrase for the second flag. lets see if it works.
+
+![alt text](assets/53.png)
+i was right about the passphrase for the second flag. i used the first flag as passphrase and got the second flag.
+
+**Conclusion**: write conclusion on whole lab memslab 1-5
+
+In this series of memory analysis labs, I have explored various techniques for extracting valuable information from memory dumps. Each lab presented unique challenges, requiring us to adapt our approach and utilize different tools and plugins.
+
+In Lab 1, it focused on basic memory analysis techniques, learning how to identify and extract relevant data from memory dumps. We gained hands-on experience with tools like Volatility and learned how to interpret the results.
+
+Lab 2 introduced us to more advanced techniques, including the use of plugins to recover specific types of data. I learned how to leverage the power of plugins to streamline our analysis and improve our chances of finding critical information.
+
+In Lab 3, I encountered more complex scenarios, requiring us to think creatively and apply our knowledge in new ways. I learned how to combine multiple tools and techniques to achieve our goals.
+
+Lab 4 challenged us to dig deeper into the memory dumps, uncovering hidden artifacts and recovering deleted files. We gained valuable experience in forensic analysis and learned how to approach complex cases methodically.
+
+Finally, in Lab 5, we put our skills to the test, tackling a real-world scenario that required us to apply everything we had learned throughout the previous labs. We successfully extracted multiple flags, demonstrating our proficiency in memory analysis and forensic investigation.
+
+Overall, these labs have provided us with a solid foundation in memory analysis techniques and have prepared us for future challenges in the field of digital forensics.
