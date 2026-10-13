@@ -254,7 +254,34 @@ now lets move to the next stage. I am stuck because i don't have passphrase for 
 ![alt text](assets/53.png)
 i was right about the passphrase for the second flag. i used the first flag as passphrase and got the second flag.
 
-**Conclusion**: write conclusion on whole lab memslab 1-5
+**Plugin Used**
+
+**imageinfo**:  It provides basic information about the memory dump, including the operating system version, service pack level, and architecture. It helps in determining the appropriate profile to use for analysis.
+
+**cmdline**: This plugin retrieves the command line arguments of running processes at the time of the memory dump. It can help identify suspicious or interesting processes and their associated files.
+
+**dumpfiles**: It allows us to dump files from the memory dump based on their offsets. It is useful for extracting specific files for further analysis.
+
+**pslist**: lists all the running processes at the time of the memory dump. It provides information such as process IDs, parent-child relationships, and process names.
+
+**cmdscan**: scans the memory dump for command line arguments of processes. It can help identify processes that were executed and their associated files.
+
+**consoles**: retrieves the console output of running processes. It can provide insights into what was happening in the processes at the time of the memory dump.
+
+**envars**: retrieves the environment variables of running processes. It can help identify sensitive information, such as passwords or configuration settings, that may be stored in environment variables.
+
+**iehistory**: recovers fragments of Internet Explorer history index.dat cache files. It can identify accessed links, redirected links, and deleted entries, providing insights into the user's browsing activity.
+
+**hashdump**: extracts the password hashes of user accounts from the memory dump. It can be useful for password cracking or further analysis of user credentials and it also list the users on the system.
+
+**mftparser**: extracts the Master File Table (MFT) from the memory dump. It allows us to analyze the file system structure and locate specific files, even if they have been deleted.
+
+**netscan**: scans the memory dump for network connections and provides information about active network sockets, including IP addresses, ports, and connection states. It can help identify suspicious network activity.
+
+
+**filescan**: This plugin scans for all the files in the memory dump and provides their offsets, which can be used to dump specific files.
+
+**Conclusion**
 
 In this series of memory analysis labs, I have explored various techniques for extracting valuable information from memory dumps. Each lab presented unique challenges, requiring us to adapt our approach and utilize different tools and plugins.
 
@@ -269,3 +296,4 @@ Lab 4 challenged us to dig deeper into the memory dumps, uncovering hidden artif
 Finally, in Lab 5, we put our skills to the test, tackling a real-world scenario that required us to apply everything we had learned throughout the previous labs. We successfully extracted multiple flags, demonstrating our proficiency in memory analysis and forensic investigation.
 
 Overall, these labs have provided us with a solid foundation in memory analysis techniques and have prepared us for future challenges in the field of digital forensics.
+
